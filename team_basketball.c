@@ -4,9 +4,17 @@
 
 #define size 10
 
+typedef struct
+{
+  double Bigger;
+  double Smaller;
+} Compare;
+
 void vMenu();
 void vPrint_Data(double * height, char ** Names);
 double Media(double * height);
+//double Desvio_Padrao();
+void Bigger_Smaller(double * height, Compare * stheight);
 
 int main()
 {
@@ -15,6 +23,7 @@ int main()
   double iHeight[10] = {0};
   int iResp = 0;
   int i = 0;
+  Compare stheight;
 
   memset(&cNames, 0, sizeof(cNames));
 
@@ -43,7 +52,12 @@ int main()
         break;
 
       case 2:
-        printf("Media das alturas do time: %lf", Media(iHeight));
+        printf("Media das alturas do time: %.2lf\n", Media(iHeight));
+        break;
+
+      case 4:
+        Bigger_Smaller(iHeight, &stheight);
+        printf("Maior altura: %.2lf\nMenor altura: %.2lf\n", stheight.Bigger, stheight.Smaller);
         break;
       
       case 6:
@@ -77,7 +91,7 @@ void vPrint_Data(double * height, char **Names)
   printf("\n\t---- Jogadores ----\n");
 
   for( iCount = 0; iCount < size; iCount++ )
-    printf("Nome: %s \tAltura: %lf\n", Names[iCount], height[iCount]);
+    printf("Nome: %s \tAltura: %.2lf\n", Names[iCount], height[iCount]);
 }
 
 double Media(double * height)
@@ -91,4 +105,21 @@ double Media(double * height)
   media = sum / 2;
 
   return media;
+}
+
+void Bigger_Smaller(double * height, Compare * stheight)
+{
+  int i = 0;
+
+  stheight->Smaller = 1000.00;
+
+  for( i = 0; i < size; i++ )
+  {
+     if(height[i] > stheight->Bigger)
+       stheight->Bigger = height[i];
+
+     if(height[i] < stheight->Smaller)
+       stheight->Smaller = height[i];
+  }
+
 }
