@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define size 10
+#define size 4 
 
 typedef struct
 {
@@ -15,6 +15,8 @@ void vPrint_Data(double * height, char ** Names);
 double Media(double * height);
 //double Desvio_Padrao();
 void Bigger_Smaller(double * height, Compare * stheight);
+double Median(double * height);
+void selectionSort(double * vet, int n);
 
 int main()
 {
@@ -49,17 +51,21 @@ int main()
     {
       case 1:
         vPrint_Data(iHeight, data);
-        break;
+      break;
 
       case 2:
         printf("Media das alturas do time: %.2lf\n", Media(iHeight));
-        break;
+      break;
 
       case 4:
         Bigger_Smaller(iHeight, &stheight);
         printf("Maior altura: %.2lf\nMenor altura: %.2lf\n", stheight.Bigger, stheight.Smaller);
-        break;
+      break;
       
+      case 5:
+        printf("Mediana das alturas: %.2lf\n", Median(iHeight));
+      break;
+
       case 6:
         printf("Operacao finalizada\n");
       break;
@@ -122,4 +128,40 @@ void Bigger_Smaller(double * height, Compare * stheight)
        stheight->Smaller = height[i];
   }
 
+}
+
+double Median(double * height)
+{
+  double height_aux[size] = {0};
+
+  memcpy(height_aux, height, sizeof(height_aux));
+
+  selectionSort(height_aux, size);
+
+  if(size % 2 == 0)
+    return (height_aux[size/2] + height_aux[size/2 - 1]) / 2;
+
+  return height_aux[size/2];
+} 
+
+void selectionSort(double * vet, int n)
+{
+  int i = 0, j = 0, menor = 0, aux = 0, cont = 0;
+
+  for ( i = 0; i < n-1; i++)
+  {
+    menor = i;
+    cont++;
+    for ( j = i + 1; j < n; j++, cont++)
+    {
+      if ( vet[j] < vet[menor] )
+        menor = j;
+    }
+  
+    aux = vet[menor];
+    vet[menor] = vet[i];
+    vet[i] = aux;
+  }
+
+  printf("Comparacoes: %d\n", cont);
 }
