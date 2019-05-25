@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
-#define size 4 
+#define size 10 
 
 typedef struct
 {
@@ -12,11 +13,11 @@ typedef struct
 
 void vMenu();
 void vPrint_Data(double * height, char ** Names);
-double Media(double * height);
-//double Desvio_Padrao();
 void Bigger_Smaller(double * height, Compare * stheight);
-double Median(double * height);
 void selectionSort(double * vet, int n);
+double Media(double * height);
+double Standard_deviation(double * height);
+double Median(double * height);
 
 int main()
 {
@@ -54,12 +55,16 @@ int main()
       break;
 
       case 2:
-        printf("Media das alturas do time: %.2lf\n", Media(iHeight));
+        printf("Media das alturas do time: %.2lf m\n", Media(iHeight));
       break;
+
+      case 3:
+        printf("Desvio padrão: %.4lf\n", Standard_deviation(iHeight));
+        break;
 
       case 4:
         Bigger_Smaller(iHeight, &stheight);
-        printf("Maior altura: %.2lf\nMenor altura: %.2lf\n", stheight.Bigger, stheight.Smaller);
+        printf("Maior altura: %.2lf m\nMenor altura: %.2lf m\n", stheight.Bigger, stheight.Smaller);
       break;
       
       case 5:
@@ -97,18 +102,18 @@ void vPrint_Data(double * height, char **Names)
   printf("\n\t---- Jogadores ----\n");
 
   for( iCount = 0; iCount < size; iCount++ )
-    printf("Nome: %s \tAltura: %.2lf\n", Names[iCount], height[iCount]);
+    printf("Nome: %s \tAltura: %.2lf m\n", Names[iCount], height[iCount]);
 }
 
 double Media(double * height)
 {
-  double media = 0.0;
-  int i = 0, sum = 0;
+  double media = 0.0, sum = 0;
+  int i = 0;
 
   for(i = 0; i < size; i++)
     sum += height[i];
   
-  media = sum / 2;
+  media = sum / size;
 
   return media;
 }
@@ -146,13 +151,13 @@ double Median(double * height)
 
 void selectionSort(double * vet, int n)
 {
-  int i = 0, j = 0, menor = 0, aux = 0, cont = 0;
+  int i = 0, j = 0, menor = 0;
+  double aux = 0.0;
 
   for ( i = 0; i < n-1; i++)
   {
     menor = i;
-    cont++;
-    for ( j = i + 1; j < n; j++, cont++)
+    for ( j = i + 1; j < n; j++)
     {
       if ( vet[j] < vet[menor] )
         menor = j;
@@ -163,5 +168,19 @@ void selectionSort(double * vet, int n)
     vet[i] = aux;
   }
 
-  printf("Comparacoes: %d\n", cont);
+}
+
+double Standard_deviation(double * height)
+{
+  int i = 0;
+  double media = 0.0, d_p = 0.0;
+  
+  media = Media(height);
+
+  for ( i = 0; i < size; i++ )
+    d_p += pow(height[i] - media, 2);
+
+  d_p = sqrt(d_p / size);
+
+  return d_p;
 }
